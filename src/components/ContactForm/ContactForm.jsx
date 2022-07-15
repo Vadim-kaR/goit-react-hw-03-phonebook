@@ -6,8 +6,20 @@ import { InputTitle, InputField, AddBtn } from './ContactForm.styled';
 import * as yup from 'yup';
 
 let schema = yup.object().shape({
-  name: yup.string().required(),
-  number: yup.number().required().positive().integer(),
+  name: yup
+    .string()
+    .required()
+    .matches(
+      /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/,
+      'name may contain only letters'
+    ),
+  number: yup
+    .string()
+    .required()
+    .matches(
+      /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/,
+      'Phone number is not valid'
+    ),
 });
 
 class ContactForm extends Component {
@@ -32,22 +44,12 @@ class ContactForm extends Component {
           >
             <InputField htmlFor="name">
               <InputTitle>Name</InputTitle>
-              <Field
-                type="text"
-                name="name"
-                pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-                title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-              />
+              <Field type="text" name="name" />
               <ErrorMessage component="div" name="name" />
             </InputField>
             <InputField htmlFor="number">
               <InputTitle>Phone</InputTitle>
-              <Field
-                type="tel"
-                name="number"
-                pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-                title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-              />
+              <Field type="tel" name="number" />
               <ErrorMessage component="div" name="number" />
             </InputField>
             <AddBtn type="submit">Add Contact</AddBtn>
